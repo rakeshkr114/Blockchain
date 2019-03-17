@@ -20,6 +20,8 @@ app.post('/mine', (req, res)=>{
     const block = bc.addBlock(req.body.data);       // add new block to the blockchain
     console.log(`New block added: ${block.toString()}`);
 
+    p2pServer.syncChains();
+
     res.redirect('/blocks'); // wil call the get method on '/bocks'
 });
 
