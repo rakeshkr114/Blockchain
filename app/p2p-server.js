@@ -40,6 +40,34 @@ class P2pServer {
         //adding the socket to sockets array
         this.sockets.push(socket);
         console.log('Socket connected');
+
+        //message handler
+        this.messageHandler(socket);
+
+        //sending message(current chain) to all the connected peers [Note: inside forEach loop]
+        //socket.send(JSON.stringify(this.blockchain.chain));
+        this.sendChain(socket);
+    }
+
+    //whenever message(chain of other app's instances) comes to the this socket-server, log it
+    messageHandler(socket){
+        socket.on('message', message => {
+            const data = JSON.parse(message);
+            //console.log('data',data);
+
+            //on receiving chain, call replaceChain fn. to replace it with longest chain!
+            this.blockchain.replaceChain(data);
+        });
+    }
+
+    //method to send message(current chain) to the specified socket
+    sendChain(socket){
+        socket.send(JSON.stringify(this.blockchain.chain));
+    }
+
+    //To sync chains across the network, send the new current chain to all the connected peers
+    syncChains(){
+        this.sockets.forEach(socket => this.sendChain(socket));
     }
 }
 
