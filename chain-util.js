@@ -13,6 +13,7 @@ class ChainUtil {
         return uuidV1();    // call the fun. and return the ID
     }
 
+    //hash function  as Static method to reuse the hashing code
     static hash(data){  //generate a hash of string/number/javascropt Object or others
         return SHA256(JSON.stringify(data)).toString();
     }
