@@ -19,7 +19,19 @@ class Transaction{
             {amount, address: recipient}  //how much currency the sender wants to send to an individual
         ])
 
+        Transaction.signTransaction(transaction, senderWallet);  // sign tranaction and generate input
+
         return transaction;
+    }
+
+    //sign transactions(outputs) with senderWallet's private key usning elliptic module's genKeyPair().sign() method
+    static signTransaction(transaction, senderWallet){
+        transaction.input = {
+            timestamp: Date.now(),
+            balance: senderWallet.balance,
+            address: senderWallet.publicKey,
+            signature: senderWallet.sign(ChainUtil.hash(transaction.outputs))  // signing outputs of the transaction
+        }
     }
 }
 
